@@ -9,9 +9,9 @@
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^24.0.1",
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.4.2",
+    "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@types/node": "^18.16.0",
     "alex": "^11.0.0",
@@ -40,13 +40,17 @@
     "test": "ava"
   },
   "ava": {
-		"extensions": {
-			"ts": "module"
-		},
-		"nodeArguments": [
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
       "--no-warnings",
-			"--loader=ts-node/esm",
-			"--experimental-specifier-resolution=node"
-		]
-	}
+      "--loader=ts-node/esm",
+      "--experimental-specifier-resolution=node"
+    ]
+  },
+  "name": "@iasd/handleAsync",
+  "version": "1.0.0",
+  "author": "Sebastian <sebastian@iamsebastian.dev>",
+  "private": false
 }
