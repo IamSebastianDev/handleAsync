@@ -1,46 +1,62 @@
 <!-- @format -->
 
-# TypeScript NPM-Package Template
+# @iasd/handle-async
 
-This template can be used as a opinionated starting point for a typescript based npm package. It uses several tools to enhance the dx aspect of creating a npm package. Read more about how the different aspects of the template in the [`Contributing Guidelines`](./contributing.md).
+A simple, yet powerful, utility function to handle async operations, providing a clean and consistent API.
 
-## Tools used in the template
+## 🚀 Getting started
 
--   [yarn](https://yarnpkg.com/getting-started)
--   [TypeScript](https://www.typescriptlang.org)
--   [Rollup](https://rollupjs.org/guide/en/) as bundler, using esbuild to transpile TypeScript to JavaScript
--   [ava](https://github.com/avajs/ava) as test-runner
--   [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) to ensure commit standards
--   [Semantic Release](https://semantic-release.gitbook.io/semantic-release/) to create releases automatically
--   [Prettier](https://prettier.io) & [Pretty-quick](https://www.npmjs.com/package/pretty-quick) to format the code
--   [alex](https://alexjs.com) for linting the documentation
-
-## Getting started
-
-To get started, clone the repository and recreate the git repository to start with a clean template.
+To use the utility functions with npm and/or a bundler such as webpack or rollup, install it via yarn or npm:
 
 ```bash
-git clone https://github.com/IamSebastianDev/template-pkg.git <your-package-name>
-
-cd <your-package-name>
-
-# Reset the git repository
-yarn reset
-
-# This will leave you with three branches, main, development and release.
+yarn add @iasd/handle-async
+# or use npm
+npm install @iasd/handle-async
 ```
 
-After creating a new repository, fill out the remaining information in the `package.json` and install the dev-dependencies. You should use the defaults already set in the `package.json` and only change the not already set meta information.
+You can also use it directly in the browser and include it via CDN (or locally, if you like).
 
-```bash
-# fill out the package.json
-yarn init
-# do a clean install of the dependencies
-yarn ci
-# install githooks
-yarn setup
+```html
+<head>
+    ...
+    <!-- as a local file -->
+    <script src="./your/path/to/handleAsync.browser.min.js"></script>
+    <!-- or via CDN -->
+    <script src="http://unpkg.com/@iasd/handle-async"></script>
+    ...
+</head>
 ```
 
-## Development
+## 🔧 Usage
 
-Checkout the [`Contributing Guidelines`](./contributing.md) to find out how to develop within your newly created repository.
+### Imports and Global
+
+The library provides exports for modern `import` syntax as well as exports for the `require` syntax.
+
+```js
+// node require syntax
+const { handleAsync, assertError } = require('@iasd/handle-async');
+
+// modern es6 style syntax
+import { handleAsync, assertError } from '@iasd/handle-async';
+```
+
+In case you included the library file locally or via CDN, the `handleAsync` object is globally available.
+
+```js
+const { handleAsync, assertError } = handleAsync;
+```
+
+## Usage
+
+## API
+
+## Contributing
+
+### `handleAsync: <Res, Err extends Error | string, Args extends unknown[]>(asyncAction: AsyncAction<Args, Res>,...args: Args): Promise<Result<Res, Err>>`
+
+If you would like to contribute, take a look at the [contribution guide](./contributing.md).
+
+## License
+
+`handleAsync` is licensed under the [MIT License](https://opensource.org/licenses/MIT)
