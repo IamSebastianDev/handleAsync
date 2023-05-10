@@ -24,6 +24,7 @@
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-dts": "^5.3.0",
     "rollup-plugin-esbuild": "^5.0.0",
+    "rollup-plugin-terser": "^7.0.2",
     "semantic-release": "^21.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
@@ -52,5 +53,5 @@
   "name": "@iasd/handleAsync",
   "version": "1.0.0",
   "author": "Sebastian <sebastian@iamsebastian.dev>",
-  "private": false
+  "unpkg": "./dist/handleAsync.browser.min.js"
 }
