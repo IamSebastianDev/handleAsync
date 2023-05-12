@@ -78,7 +78,7 @@ const { result } = (await handleAsync(asyncOperation)).error((error) => console.
 
 ## API
 
-### handleAsync
+### `handleAsync: <Res, Err extends Error | string, Args extends unknown[]>(asyncAction: AsyncAction<Args, Res>,...args: Args): Promise<Result<Res, Err>>`
 
 Asynchronously handles a specified action, returning a `Result` object that contains details about the outcome of the operation.
 
@@ -166,8 +166,6 @@ const convertedError = assertError(unknownValue);
 ```
 
 ## Contributing
-
-### `handleAsync: <Res, Err extends Error | string, Args extends unknown[]>(asyncAction: AsyncAction<Args, Res>,...args: Args): Promise<Result<Res, Err>>`
 
 If you would like to contribute, take a look at the [contribution guide](./contributing.md).
 
