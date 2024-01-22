@@ -15,7 +15,7 @@
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@types/node": "^20.10.3",
     "alex": "^11.0.0",
-    "ava": "^6.0.1",
+    "ava": "^6.1.0",
     "esbuild": "^0.19.2",
     "husky": "^8.0.2",
     "prettier": "^3.0.0",
