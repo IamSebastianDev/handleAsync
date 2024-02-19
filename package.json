@@ -13,7 +13,7 @@
     "@commitlint/config-conventional": "^18.4.0",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
-    "@types/node": "^20.10.3",
+    "@types/node": "^20.11.19",
     "alex": "^11.0.0",
     "ava": "^6.0.1",
     "esbuild": "^0.19.2",
