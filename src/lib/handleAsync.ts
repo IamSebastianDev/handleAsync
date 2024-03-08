@@ -1,81 +1,41 @@
 /** @format */
 
-import { AsyncAction, ErrorHandler, NarrowedResult, Result, ResultHandler } from '../types';
+import { AsyncHandler } from '../types/async-handler';
+import { AsyncRunner } from '../types/async-runner';
+import { assertError } from './assertError';
 
 /**
- * Asynchronously handles a specified action, returning a `Result` object
- * that contains details about the outcome of the operation.
+ * Executes an asynchronous operation provided by the `runner`, handling the result
+ * through the specified `handler`. This function abstracts error handling and result
+ * transformation to provide a more streamlined async control flow.
  *
  * @async
- * @template Res The type of the result value.
- * @template Err The type of the error, which extends `Error` or `string`.
- * @template Args The types of the arguments accepted by the async action.
- * @param {AsyncAction<Args, Res>} asyncAction The async action to be handled.
- * @param {...Args} args The arguments to pass to the async action.
- * @returns {Promise<Result<Res, Err>>} A promise that resolves to a `Result` object. The `Result` object contains:
- * - `isOk`: A function that returns true if the operation was successful.
- * - `error`: A function that accepts an error handler and returns a `NarrowedResult`. If an error occurred, the error handler is invoked with the error, and the error is re-thrown.
- * - `errorValue`: The error that occurred during the operation, or null if no error occurred.
- * - `result`: The result of the operation, or null if an error occurred.
- * @throws {Err} The error that occurred during the async action, if any.
+ * @template Result The type of the result produced by the `runner`.
+ * @template Target The type of the result after being processed by the `handler`.
+ * @param {AsyncRunner<Result>} runner A function that executes an async operation and returns a promise.
+ * @param {AsyncHandler<Result, Target>} handler An object containing `Ok` and `Err` methods for result handling:
+ * - `Ok`: A function that processes the result of the async operation if it's successful.
+ * - `Err`: A function that processes any errors thrown during the async operation.
+ * @returns {Promise<Target>} A promise that resolves to the processed result (`Target`) after applying the `Ok` or `Err` handler,
+ * depending on whether the operation succeeded or failed. The promise may also be rejected if an error occurs that is not handled by `Err`.
  *
- * ---
- *
- * ```ts
- * import {handleAsync} from "@iasd/handle-async"
- *
- * const { result } = await handleAsync(async () => {...asyncOperation})
- * // returns Promise<{ result, error, errorValue, isOk }>
- * // result might be null in this case, as errors are not handled
- * // you can use the errorValue returned or the error method to
- * // handle the error manually
- *
- * const {result, complete} = (await handleAsync(async () => {...whatever})).error((err) => throw err)
- * // here, result is not null if no error exists. If an error exists,
- * // the function throws.
- *
- * ```
+ * The primary purpose of this function is to provide a structured way to handle asynchronous operations, encapsulating
+ * the complexity of error handling and result transformation. This allows for cleaner, more readable code when dealing with
+ * asynchronous logic.
  */
+export const handleAsync = async <Result, Target = Result>(
+    runner: AsyncRunner<Result>,
+    handler: AsyncHandler<Result, Target>,
+): Promise<Target> => {
+    const { Ok, Err } = handler;
 
-export const handleAsync = async <Res, Err extends Error | string, Args extends unknown[]>(
-    asyncAction: AsyncAction<Args, Res>,
-    ...args: Args
-): Promise<Result<Res, Err>> => {
-    let result: Res | null = null;
-    let error: null | unknown = null;
-
-    const completeHandler = (handler: ResultHandler<Res>) => {
-        handler(result as Res);
-        return {
-            result,
-        };
-    };
-
-    const errorHandler = (handler: ErrorHandler<Err>): NarrowedResult<Res> => {
-        if (error) {
-            throw handler(error as Err);
-        }
-
-        return {
-            result: result as Res,
-            complete: completeHandler,
-        };
-    };
-
-    const checkResult = () => {
-        return result !== null && error === null;
-    };
-
-    try {
-        result = await asyncAction(...args);
-    } catch (e: unknown) {
-        error = e;
-    } finally {
-        return {
-            isOk: checkResult,
-            error: errorHandler,
-            errorValue: error,
-            result,
-        };
-    }
+    return new Promise((resolve, reject) =>
+        runner()
+            // Pass result to result handler
+            .then((result) => resolve(Ok(result)))
+            // Pass error to the error handler to handle
+            .catch((error) => resolve(Err(assertError(error))))
+            // Pass rethrow'n error to the rejector, to reject the promise
+            .catch((err) => reject(err)),
+    );
 };
