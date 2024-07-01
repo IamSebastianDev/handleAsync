@@ -29,7 +29,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "semantic-release": "^23.0.6",
     "tsx": "^4.11.0",
-    "typescript": "^5.4.2"
+    "typescript": "^5.5.3"
   },
   "scripts": {
     "preci": "rm -rf node_modules",
